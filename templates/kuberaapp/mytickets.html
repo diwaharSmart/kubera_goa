@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>My Tickets</h2>
+    <div class="row">
+        {% for ticket in tickets %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Ticket {{ ticket.pk }}</h5>
+                    <p class="card-text">Order ID: {{ ticket.order.order_id }}</p>
+                    <p class="card-text">Draw No: {{ ticket.draw.pk }}</p>
+                    <p class="card-text">Draw Date: {{ ticket.draw.draw_date|date:"d-M-Y" }}</p>
+                    <p class="card-text">Draw Time: {{ ticket.draw.draw_time|time:"h A" }}</p>
+                    <p class="card-text">Ticket Status  : {{ ticket.order.order_status }}</p>
+                    <p class="card-text">Ticket Board  : {{ ticket.board }}</p>
+                    <p class="card-text">Your Ticket Number   : {{ ticket.choosen_number }}</p>
+                    <p class="card-text">Quantity   : {{ ticket.quantity }}</p>
+                    <p class="card-text">Your Number   : {{ ticket.choosen_number }}</p>
+                    <p class="card-text">Ticket Total  : {{ ticket.total_price }}</p>
+                    
+                    {% if ticket.draw.result_generated %}
+                    <p class="card-text">Result Number  : {{ ticket.draw.result_number }}</p>
+                    <p class="card-text">Winning Amount : {{ ticket.winning_amount }}</p>
+                    {% else %}
+                        <p style="color:red;">Result Not Released</p>
+                    {% endif %}
+                    {% if ticket.settled %}
+                    <p style="color:green;">Settlement  Comleted</p>
+                    {% else %}
+                    <p style="color:red;">Settlement Not Comleted</p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Agent Search Successful</h2>
+    <p>The agent with ID {{ agent_id }} has been found.</p>
+    <p>Agent's First Name: {{ first_name }}</p>
+    <p>Agent's Mobile Number: {{ mobile_number }}</p>
+    <p>Total Collected Amount: {{ collected_amount }}</p>
+    <p>Remaining Balance: {{ remaining_balance }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="amount">Enter Amount to Collect:</label>
+        <input type="number" name="amount" step="0.01" required>
+        <button type="submit">Collect</button>
+    </form>
+
+    <h3>Last 10 Collection Amounts:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Collection Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for collection_amount in last_10_collection_amounts %}
+            <tr>
+                <td>{{ collection_amount.collection_date|date:"d-M-Y" }}</td>
+                <td>{{ collection_amount.collection_date|time:"H:i A" }}</td>
+                <td>{{ collection_amount.amount_recieved }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

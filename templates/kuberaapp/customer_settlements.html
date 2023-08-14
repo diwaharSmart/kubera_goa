@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Customer Settlements</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Draw Date</th>
+                <th>Winning Amount</th>
+                <th>Payment Methods</th>
+                <th>Settle</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in accepted_orders %}
+            <tr>
+                <td>{{ order.pk }}</td>
+                <td>{{ order.draw.draw_date|date:"d-M-Y" }}</td>
+                <td>{{ order.winning_amount }}</td>
+                <td>
+                     UPI | {{order.customer.upi_id}}<br>
+                    
+                    Paytm | {{order.customer.paytm_number}}<br>
+                 
+                    PhonePe | {{order.customer.phonepe_number}}<br>
+                  
+                    Google Pay | {{order.customer.google_pay_number}}
+                   
+                </td>
+                <td>
+                    <form method="post" action="{% url 'settle_order' order.pk %}">
+                        {% csrf_token %}
+                        <button type="submit">Settle</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

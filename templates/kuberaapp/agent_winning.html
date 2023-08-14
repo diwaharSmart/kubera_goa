@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Agent Settlement - {{ agent.username }}</h2>
+    <p>Total Winning Amount: <b style="font-size:30px;">Rs {{ total_winning_amount }}</b></p>
+    <h3>Winning Details</h3>
+    <form method="post" action="{% url 'settle_winning' agent.username %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Settle</button>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Draw ID</th>
+                <th>Winning Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for winning in agent_winnings %}
+            <tr>
+                <td>{{ winning.draw_id }}</td>
+                <td>{{ winning.winning_amount }}</td>
+                <td>
+                    {% if not winning.is_settled %}
+                        Not Settled
+                    {% else %}
+                        Settled
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

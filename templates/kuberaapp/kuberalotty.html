@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KuberaLotty</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">KuberaLotty</a>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Settlement Amount</th>
+                            <th>Amount Received</th>
+                            <th>Remaining Amount</th>
+                            <th>Profit Percentage</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in filtered_data %}
+                        <tr>
+                            <td>{{ item.number }}</td>
+                            <td>{{ item.settelment_amount }}</td>
+                            <td>{{ item.amount_recieved }}</td>
+                            <td>{{ item.remaining_amount }}</td>
+                            <td>{{ item.profit_percentage }} %</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#generateResultModal{{ item.number }}">Select</button>
+                            </td>
+                        </tr>
+                        <!-- Generate Result Modal -->
+                        <div class="modal fade" id="generateResultModal{{ item.number }}" tabindex="-1" role="dialog" aria-labelledby="generateResultModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="generateResultModalLabel">Generate Result</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="font-weight-bold">Item Number: {{ item.number }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <a href="{% url 'generate_result' draw_id=draw_id number=item.number %}" class="btn btn-primary">Generate</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

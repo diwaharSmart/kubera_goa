@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="create-order-title">Create Order (Enter comma-separated values between each number)</h2>
+    <form method="post" id="order-form">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <div id="formset-container">
+            {% for form in formset %}
+                {{ form.as_table }}
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+        <!--<button type="button" id="add-formset">Add Another</button> -->
+    </form>
+</div>
+
+<style>
+    /* Add your custom styles here */
+
+.create-order-title {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#order-form {
+    margin-top: 20px;
+}
+
+#formset-container {
+    margin-top: 10px;
+}
+
+.submit-btn {
+    margin-top: 20px;
+}
+
+/* Add responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .create-order-title {
+        font-size: 20px;
+    }
+}
+
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const formsetContainer = document.getElementById('formset-container');
+        const addFormsetButton = document.getElementById('add-formset');
+        const formsetManagementForm = document.getElementById('id_form-TOTAL_FORMS');  // Replace 'form' with your form prefix
+    
+        let formsetCount = {{ formset.management_form.TOTAL_FORMS.value }};
+        addFormsetButton.addEventListener('click', function() {
+            const formData = new FormData();
+            formData.append('form-TOTAL_FORMS', formsetCount + 1);
+            formData.append('form-INITIAL_FORMS', formsetCount);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');  // Add this line
+    
+            fetch('{% url "create_formset" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',  // Add this header to indicate AJAX request
+                },
+            })
+            .then(response => response.text())
+            .then(data => {
+                const newFormset = document.createElement('div');
+                newFormset.innerHTML = data;
+                formsetContainer.appendChild(newFormset);
+                formsetCount++;
+                formsetManagementForm.value = formsetCount;
+            });
+        });
+    });
+    </script>
+    
+{% endblock %}

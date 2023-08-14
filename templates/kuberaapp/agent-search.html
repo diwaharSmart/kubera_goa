@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Agent Search</h2>
+    <form method="post" action="{% url 'search_agent' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="agent_id">Agent ID:</label>
+            <input type="text" class="form-control" id="agent_id" name="agent_id" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+{% endblock %}
