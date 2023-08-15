@@ -467,7 +467,7 @@ from .forms import OrderCreationForm
 from django import forms
 
 from django.forms import formset_factory
-
+@login_required(login_url='login') 
 def create_order(request,draw_id):
     OrderCreationFormSet = formset_factory(OrderCreationForm, extra=1)
 
