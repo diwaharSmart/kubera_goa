@@ -5,6 +5,8 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         /* Add your custom styles here */
 
@@ -106,12 +108,30 @@
         .my-float{
             margin-top:16px;
         }
+        @media (max-width: 576px) {
+            .container {
+              margin-top: 10px;
+              padding: 10px;
+            }
+          
+            .draw-card {
+              padding: 8px;
+              margin-bottom: 8px;
+            }
+          
+            .logo {
+              height: 30px;
+            }
+          
+            .navbar-collapse {
+              background-color: #000;
+            }
     </style>
 </head>
 <body>
  
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="" >
             <a class="navbar-brand" href="{% url 'home' %}"><img class="logo" src="{% static 'logo-1.jpg' %}" alt="Logo"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
