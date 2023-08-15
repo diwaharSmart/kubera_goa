@@ -2,9 +2,14 @@
 
 {% block content %}
 <div class="object-tools">
+    {% if object_id %}
+    
+
     <a href="{% url 'accept_order' object_id %}" class="btn btn-primary mr-2">Accept Orders</a>
     <a href="{% url 'generate_preview_result' object_id %}" class="btn btn-secondary mr-2">Generate Result</a>
     <a href="{% url 'calculate_order' object_id %}" class="btn btn-secondary">Generate Loot Amount</a>
+    {% endif %}
 </div>
+
 {{ block.super }}
 {% endblock %}

@@ -153,6 +153,14 @@
                         <a class="nav-link" href="{% url 'customer_settlements' %}">Customer Settlement</a>
                     </li>
 
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
                     
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'draws_list' %}">Previous Results</a>
@@ -184,52 +192,61 @@
 <!-- Include Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    
     (function () {
         "use strict";
       
         const items = [
           "0","1","2","3","4","5","6","7","8","9"
         ];
+
+       
+        
       
         const doors = document.querySelectorAll(".door");
 
         animateSpin();
       
         async function animateSpin() {
-          while (true) {
-            init();
-            for (const door of doors) {
-              const boxes = door.querySelector(".boxes");
-              const duration = parseInt(boxes.style.transitionDuration);
-              boxes.style.transform = "translateY(0)";
-              await new Promise((resolve) => setTimeout(resolve, duration * 100));
+            while (true) {
+                init();
+                for (const door of doors) {
+                    const boxes = door.querySelector(".boxes");
+                    const duration = parseInt(boxes.style.transitionDuration);
+                    const randomOffset = Math.floor(Math.random() * items.length); // Generate random offset
+                    boxes.style.transform = `translateY(-${door.clientHeight * randomOffset}px)`;
+                    await new Promise((resolve) => setTimeout(resolve, duration * 100));
+                }
+                await new Promise((resolve) => setTimeout(resolve, 500));
             }
-            await new Promise((resolve) => setTimeout(resolve, 500));
-          }
         }
       
         function init() {
-          for (const door of doors) {
-            const boxes = door.querySelector(".boxes");
-            const boxesClone = boxes.cloneNode(false);
-      
-            const pool = items.slice();
-      
-            for (let i = pool.length - 1; i >= 0; i--) {
-              const box = document.createElement("div");
-              box.classList.add("box");
-              box.style.width = door.clientWidth + "px";
-              box.style.height = door.clientHeight + "px";
-              box.textContent = pool[i];
-              boxesClone.appendChild(box);
+            for (const door of doors) {
+                const boxes = door.querySelector(".boxes");
+                const boxesClone = boxes.cloneNode(false);
+        
+                // Shuffle the items array
+                const shuffledItems = [...items];
+                for (let i = shuffledItems.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffledItems[i], shuffledItems[j]] = [shuffledItems[j], shuffledItems[i]];
+                }
+        
+                for (let i = 0; i < shuffledItems.length; i++) {
+                    const box = document.createElement("div");
+                    box.classList.add("box");
+                    box.style.width = door.clientWidth + "px";
+                    box.style.height = door.clientHeight + "px";
+                    box.textContent = shuffledItems[i];
+                    boxesClone.appendChild(box);
+                }
+                boxesClone.style.transitionDuration = "1s";
+                boxesClone.style.transform = `translateY(0)`;
+                door.replaceChild(boxesClone, boxes);
             }
-            boxesClone.style.transitionDuration = "1s";
-            boxesClone.style.transform = `translateY(-${
-              door.clientHeight * (pool.length - 1)
-            }px)`;
-            door.replaceChild(boxesClone, boxes);
-          }
         }
+        
       
         // You can add shuffle function here if needed
       
