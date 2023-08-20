@@ -35,4 +35,4 @@ class DepositForm(forms.Form):
 class BankInfoForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['upi_id', 'paytm_number', 'phonepe_number', 'google_pay_number']
+        fields = ['upi_id', 'paytm_number', 'phonepe_number', 'google_pay_number', 'bank_holder_name', 'bank_account_number', 'bank_ifsc_code']

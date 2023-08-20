@@ -9,11 +9,12 @@
 
     <style>
         /* Add your custom styles here */
-
+        
         body {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #380038, #5e005e);
+            font-family: Arial, sans-serif;
         }
 
         .container {
@@ -127,8 +128,6 @@
     </style>
 </head>
 <body>
- 
-
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="" >
             <a class="navbar-brand" href="{% url 'home' %}"><img class="logo" src="{% static 'logo-1.jpg' %}" alt="Logo"></a>
@@ -154,7 +153,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'edit_bank_info' %}">Edit Bank Info</a>
                     </li>
-
+                    {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'transaction_history' %}">Approve Transactions</a>
                     </li>
@@ -170,8 +169,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'customer_settlements' %}">Customer Settlement</a>
                     </li>
+                    {% endif %}
 
-                   
+                   {% if user.is_authenticated %}
+                   {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
@@ -179,7 +180,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
                     </li>
-                    
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'draws_list' %}">Previous Results</a>
                     </li>

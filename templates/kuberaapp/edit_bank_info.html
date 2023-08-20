@@ -3,6 +3,8 @@
 {% block content %}
 <div class="container">
     <h2>Edit Bank Information</h2>
+    <hr>
+    <p>For transactions above 50000 Rs, please use the following bank details:</p>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

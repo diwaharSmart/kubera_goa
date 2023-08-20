@@ -17,6 +17,9 @@ class User(AbstractUser):
     paytm_number = models.CharField(max_length=15, blank=True, null=True)
     phonepe_number = models.CharField(max_length=15, blank=True, null=True)
     google_pay_number = models.CharField(max_length=15, blank=True, null=True)
+    bank_holder_name = models.CharField(max_length=255,blank=True,null=True)
+    bank_account_number = models.CharField(max_length=255,blank=True,null=True)
+    bank_ifsc_code = models.CharField(max_length=255,blank=True,null=True)
 
     def __str__(self):
         return self.username
@@ -178,6 +181,7 @@ class AgentWinning(models.Model):
 class WebsiteInfo(models.Model):
     whatsapp_number = models.CharField(max_length=250,blank=True,null=True)
     upi_id = models.CharField(max_length=250,blank=True,null=True)
+    upi_qr_code = models.ImageField(upload_to="qr_code",blank=True,null=True)
     gpay = models.CharField(max_length=250,blank=True,null=True)
     phonepe = models.CharField(max_length=250,blank=True,null=True)
     paytm = models.CharField(max_length=250,blank=True,null=True)

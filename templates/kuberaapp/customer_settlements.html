@@ -26,8 +26,12 @@
                  
                     PhonePe | {{order.customer.phonepe_number}}<br>
                   
-                    Google Pay | {{order.customer.google_pay_number}}
-                   
+                    Google Pay | {{order.customer.google_pay_number}}<br>
+
+                    Bank Info |<br>
+                        - Name           : {{order.customer.bank_holder_name}}<br>
+                        - Account Number : {{order.customer.bank_account_number}}<br>
+                        - Ifsc Code      : {{order.customer.bank_ifsc_code}}          
                 </td>
                 <td>
                     <form method="post" action="{% url 'settle_order' order.pk %}">

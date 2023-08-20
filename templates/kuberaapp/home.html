@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="" style="padding:20px;">
-    
+<div class="" style="padding:20px; background: linear-gradient(135deg, #380038, #5e005e);">
     
     <div class="draw-header">
         <h5>Todays Draws</h5>
@@ -20,28 +19,28 @@
                     <div class="door1">
                         <div class="boxes1">
                             <!-- Boxes will be dynamically added here -->
-                            <div class="box">{{ draw.result_number|stringformat:"d"|slice:":1" }}</div>
+                            <div class="box1">{{ draw.result_number|stringformat:"d"|slice:":1" }}</div>
                         </div>
                     </div>
                     
                     <div class="door1">
                         <div class="boxes1">
                             <!-- Boxes will be dynamically added here -->
-                            <div class="box">{{ draw.result_number|stringformat:"d"|slice:"1:2" }}</div>
+                            <div class="box1">{{ draw.result_number|stringformat:"d"|slice:"1:2" }}</div>
                         </div>
                     </div>
                     
                     <div class="door1">
                         <div class="boxes1">
                             <!-- Boxes will be dynamically added here -->
-                            <div class="box">{{ draw.result_number|stringformat:"d"|slice:"2:3" }}</div>
+                            <div class="box1">{{ draw.result_number|stringformat:"d"|slice:"2:3" }}</div>
                         </div>
                     </div>
                     
                     <div class="door1">
                         <div class="boxes1">
                             <!-- Boxes will be dynamically added here -->
-                            <div class="box">{{ draw.result_number|stringformat:"d"|slice:"3:4" }}</div>
+                            <div class="box1">{{ draw.result_number|stringformat:"d"|slice:"3:4" }}</div>
                         </div>
                     </div>
                 </div>
