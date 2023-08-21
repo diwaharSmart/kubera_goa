@@ -173,12 +173,17 @@ def generate_preview_result(request, draw_id):
             )
         
         data = []
+        # print(profit_analyisis)
         for item in profit_analyisis:
             amount_received = item['amount_recieved']
             settlement_amount = item['settelment_amount']
             
             remaining_amount = amount_received - Decimal(settlement_amount)
-            profit_percentage = (remaining_amount / amount_received) * 100
+            
+            if amount_received != Decimal('0'):
+                profit_percentage = (remaining_amount / amount_received) * Decimal('100')
+            else:
+                profit_percentage = Decimal('0')  # Handle division by zero
             
             item['remaining_amount'] = remaining_amount
             item['profit_percentage'] = int(profit_percentage)    
@@ -422,6 +427,7 @@ def register(request):
 from django.contrib.auth.forms import AuthenticationForm
 def user_login(request):
     if request.method == 'POST':
+        
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
