@@ -74,7 +74,7 @@
             </div>
         </div>
             <p class="result-not-released">Result Not Released</p>
-            <a href={% url 'create_order' draw.pk %} class="btn btn-primary">Book Tickets</a>
+            <a href={% url 'book_tickets' draw.pk %} class="btn btn-primary">Book Tickets</a>
         {% endif %}
     </div>
     {% endfor %}

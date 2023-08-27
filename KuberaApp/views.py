@@ -589,35 +589,43 @@ def wallet(request):
 
     return render(request, 'kuberaapp/wallet.html', context)
 
+@login_required(login_url='login')
 def order_preview(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     context = {'order': order}
+    if request.method == "POST":
+        try:
+            reference_id = request.POST.get("reference_id")
+            amount = request.POST.get("amount")
+            upi_address = request.POST.get("upi_address")
+            OrderApproval.objects.create(
+                order=order,
+                user = request.user,
+                transaction_id =reference_id,
+                upi_address = upi_address
+            )
+            order.order_status="not_approved"
+            order.save()
+            print("aaaaaa")
+            return redirect('view_orders')
+        except:
+            return redirect('view_orders')
+
+    
     return render(request, 'kuberaapp/preview-order.html', context)
 
 
-def checkout(request, order_id):
+def checkout(request, order_id,status):
     try:
         order = Order.objects.get(pk=order_id)
+        order.order_status = status
+        order.save()
+
+        return redirect('view_orders')
+    
     except Order.DoesNotExist:
         return redirect('home')  # Order not found, redirect to home page
 
-     # Order not verified, redirect to home page
-
-    try:
-        customer_balance = CustomerBalance.objects.get(user=request.user)
-    except CustomerBalance.DoesNotExist:
-        return redirect('home')  # Customer balance not found, redirect to home page
-
-    if customer_balance.balance >= order.order_total:
-        customer_balance.balance -= order.order_total
-        customer_balance.save()
-
-        order.order_status = 'processing'
-        order.save()
-
-        return redirect('view_orders')  # Redirect to orders page
-    else:
-        return redirect('wallet')  # Redirect to wallet page
     
 
 from .forms import BankInfoForm  # Import your BankInfoForm
@@ -686,3 +694,100 @@ def settle_order(request, order_id):
 
 
 
+def book_tickets(request,draw_id):
+    ticketprices = TicketPrice.objects.all()
+    return render(request, 'kuberaapp/book-tickets.html',{"ticketprices":ticketprices,"draw_id":draw_id})
+
+
+from django.http import JsonResponse
+
+import json
+from django.http import JsonResponse
+
+@login_required(login_url='login')
+def process_selected_tickets(request,draw_id):
+    if request.method == "POST":
+        try:
+            request_data = json.loads(request.body)
+           
+            selected_ticket_data = request_data  # Assuming the data is a list
+            # user = request.user
+            draw = Draw.objects.get(id=draw_id)
+            order = Order.objects.create(customer=request.user,draw=draw,
+                    order_status="pending")
+            for i in selected_ticket_data:
+                t = TicketPrice.objects.get(id=i["Ticket ID"])
+                quantity = int(i["Quantity"])
+                number = int(i['Ticket Number'])
+                total_amount = t.ticket_value * quantity
+
+                # Create a Ticket instance with calculated values
+                ticket = Ticket(
+                    # agent=request.user,
+                    draw=draw,
+                    customer=request.user,
+                    board=t,
+                    choosen_number=number,
+                    quantity=quantity,
+                    total_price=total_amount,
+                    order=order  # Set the order for the ticket
+                )
+                
+                ticket.save()
+                            
+                        
+            order_total = sum(ticket.total_price for ticket in order.ticket_set.all())
+            order.order_total = order_total
+            order.save()
+            
+            
+            # Process the selected ticket data here
+            # You can loop through the selected_ticket_data list and save it to your database or perform any required actions
+
+            # Return a JSON response
+            response_data = {"message": "Selected ticket data processed successfully","order_id":order.id}
+            print(response_data)
+            return JsonResponse(response_data, status=200)
+        except json.JSONDecodeError:
+            response_data = {"error": "Invalid JSON data"}
+            print(response_data)
+            return JsonResponse(response_data, status=400)
+    else:
+        response_data = {"error": "Invalid request method"}
+        print(response_data)
+        return JsonResponse(response_data, status=400)
+
+
+def order_approval_list(request):
+    order_approvals = OrderApproval.objects.filter(transaction_status="pending")
+
+    context = {
+        'order_approvals': order_approvals
+    }
+
+    return render(request, 'kuberaapp/order_approval_list.html', context)
+
+def approve_transaction(request, approval_id):
+    approval = OrderApproval.objects.get(pk=approval_id)
+    approval.transaction_status = "approved"
+    approval.transaction_approved = True
+    order= Order.objects.get(id= approval.order.id)
+    order.order_status="processing"
+    order.save()
+    approval.save()
+    return redirect('order_approval_list')
+
+def reject_transaction(request, approval_id):
+    approval = OrderApproval.objects.get(pk=approval_id)
+    approval.transaction_status = "rejected"
+    approval.transaction_approved = False
+    order= Order.objects.get(id= approval.order.id)
+    order.order_status="processing"
+    order.save()
+    approval.save()
+    return redirect('order_approval_list')
+
+def ticket_price_list(request):
+    ticket_prices = TicketPrice.objects.all()
+    context = {'ticket_prices': ticket_prices}
+    return render(request, 'kuberaapp/ticket_price.html', context)

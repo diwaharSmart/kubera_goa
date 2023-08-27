@@ -42,11 +42,17 @@ urlpatterns = [
     path('create_formset/', views.create_formset, name='create_formset'),
     path('wallet/', views.wallet, name='wallet'),
     path('order_preview/<int:order_id>/', views.order_preview, name='order_preview'),
-    path('checkout/<int:order_id>/', views.checkout, name='checkout'),
+    path('checkout/<int:order_id>/<str:status>', views.checkout, name='checkout'),
     path('edit_bank_info/', views.edit_bank_info, name='edit_bank_info'),
     path('transaction_history/', views.transaction_history, name='transaction_history'),
     path('customer_settlements/', views.customer_settlements, name='customer_settlements'),
     path('settle_order/<int:order_id>/', views.settle_order, name='settle_order'),
+    path('book_tickets/<str:draw_id>', views.book_tickets, name='book_tickets'),
+    path('process_selected_tickets/<str:draw_id>', views.process_selected_tickets, name='process_selected_tickets'),
+     path('order_approval/', views.order_approval_list, name='order_approval_list'),
+    path('approve/<int:approval_id>/', views.approve_transaction, name='approve_transaction'),
+    path('reject/<int:approval_id>/', views.reject_transaction, name='reject_transaction'),
+     path('ticket_prices/', views.ticket_price_list, name='ticket_price_list'),
 
 ]
 

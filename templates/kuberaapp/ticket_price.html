@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Ticket Price and BoardWinning Price</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Ticket Name</th>
+                <th>Ticket Price</th>
+                <th>Board Name</th>
+                <th>Winning Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket_price in ticket_prices %}
+                <tr>
+                
+                    <td>{{ ticket_price.ticket_name }}</td>
+                    <td>{{ ticket_price.price_after_commision }}</td>
+                    <td>
+                        {% for board_price in ticket_price.boardwinngprice_set.all %}
+                            {{ board_price.board_name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            N/A
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for board_price in ticket_price.boardwinngprice_set.all %}
+                            {{ board_price.winning_price }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            N/A
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

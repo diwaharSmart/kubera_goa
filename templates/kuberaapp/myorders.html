@@ -11,6 +11,9 @@
                     <h5 class="card-title">Order {{ order.pk }}</h5>
                     
                     <p class="card-text">Order Status: <b>{{ order.order_status }}</b></p>
+                    {% if order.order_status == 'pending' %}
+                    <a href="{% url 'order_preview' order.pk %}" class="checkout-button">Pay to Confirm</a>
+                    {% endif %}
                     <p class="card-text">Order Amount: <b>{{ order.order_total }}</b></p>
                 </div>
             </div>
@@ -18,4 +21,20 @@
         {% endfor %}
     </div>
 </div>
+<style>
+    .checkout-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .checkout-button:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}

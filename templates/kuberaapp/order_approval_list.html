@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+<h1>Order Approval List</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>User name</th>
+            <th>Order</th>
+            <th>Order Amount</th>
+            <th>Transaction ID</th>
+            <th>UPI Address</th>
+            <th>Transaction Date</th>
+            <th>Transaction Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for approval in order_approvals %}
+            <tr>
+                <td>{{ approval.user }}</td>
+                <td>{{ approval.user.first_name }}</td>
+                <td>{{ approval.order.id }}</td>
+                <td>{{ approval.order.order_total }}</td>
+                <td>{{ approval.transaction_id }}</td>
+                <td>{{ approval.upi_address }}</td>
+                <td>{{ approval.transaction_date }}</td>
+                <td>{{ approval.transaction_status }}</td>
+                <td>
+                    {% if approval.transaction_status == "pending" %}
+                        <a href="{% url 'approve_transaction' approval.id %}">Approve</a>
+                        <a href="{% url 'reject_transaction' approval.id %}">Reject</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

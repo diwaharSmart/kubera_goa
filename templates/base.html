@@ -140,6 +140,9 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ticket_price_list' %}"> Ticket Price</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'view_tickets' %}">My Tickets</a>
                     </li>
                     <li class="nav-item">
@@ -156,6 +159,11 @@
                     {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'transaction_history' %}">Approve Transactions</a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'order_approval_list' %}">Order Approval</a>
                     </li>
 
                     <li class="nav-item">

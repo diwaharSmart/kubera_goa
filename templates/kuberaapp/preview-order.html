@@ -29,7 +29,37 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'checkout' order.pk %}" class="checkout-button">Proceed to Checkout</a>
+    <button id="open-deposit-modal" class="btn btn-primary">Pay Now</button>
+
+</div>
+
+<!-- Add Money Modal -->
+<div id="deposit-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Pay to confirm Booking</h3>
+        <p>Copy the UPI address below and fill out the form:</p>
+        <div class="upi-address">
+            <p><strong>Static UPI Address:</strong> {{ website_info.upi_id }}</p>
+            <a href="upi://pay?pa={{ website_info.upi_id }}&am={{order.order_total}}" target="_blank">
+                <img src="{{ website_info.upi_qr_code.url }}" alt="UPI QR Code" width="100" height="100">
+            </a>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <label for="reference_id">Payment Reference Number:</label>
+        <input type="text" id="reference_id" name="reference_id" required><br><br>
+        
+        <!-- Amount Field (not editable) -->
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" name="amount" value="{{order.order_total}}" readonly>
+        <input type="hidden" id="order" name="order" value="{{order.pk}}" readonly>
+    
+    <!-- Hidden UPI Address Field -->
+            <input type="hidden" name="upi_address" value="{{ website_info.upi_id }}">
+            <button type="submit" class="btn btn-success">Deposit</button>
+        </form>
+    </div>
 </div>
 <style>
     .container {
@@ -72,5 +102,81 @@
     .checkout-button:hover {
         background-color: #0056b3;
     }
+    /* Style for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+}
+
+.close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.upi-address {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.upi-address img {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Style for the Deposit button */
+#open-deposit-modal {
+    margin-top: 20px;
+}
+
+/* Additional styles for the Deposit form */
+.form-group {
+    margin-bottom: 20px;
+}
 </style>
+<script>
+    // Open the modal when the "Deposit" button is clicked
+    const openModalButton = document.getElementById('open-deposit-modal');
+    const depositModal = document.getElementById('deposit-modal');
+    openModalButton.addEventListener('click', () => {
+        depositModal.style.display = 'block';
+    });
+
+    // Close the modal when the "Close" button is clicked
+    const closeModalButton = document.querySelector('.close');
+    closeModalButton.addEventListener('click', () => {
+        depositModal.style.display = 'none';
+    });
+
+    // Close the modal if clicked outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === depositModal) {
+            depositModal.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}

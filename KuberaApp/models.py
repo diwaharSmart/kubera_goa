@@ -121,6 +121,7 @@ class Ticket(models.Model):
 
 ORDER_STATUS =(
     ('pending','pending'),
+    # ('approve','pending'),
     ('not_verified','not_verified'),
     ('processing','processing'),
     ('accepted','accepted'),
@@ -218,6 +219,23 @@ class CustomerBalanceHistory(models.Model):
     )
     wallet = models.ForeignKey(CustomerBalance, on_delete=models.CASCADE, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    transaction_approved = models.BooleanField(default=False)
+    transaction_id = models.CharField(blank=True, null=True, max_length=255)
+    upi_address = models.CharField(blank=True, null=True, max_length=255)
+    transaction_date  = models.DateField(default=timezone.now)
+    transaction_status= models.CharField(max_length=25,default="pending",choices=TRANSACTION_STATUS)
+    class Meta:
+        unique_together = ['transaction_id', 'upi_address']
+
+
+class OrderApproval(models.Model):
+    TRANSACTION_STATUS=(
+        ("pending","pending"),
+        ("rejected","rejected"),
+        ("approved","approved"),
+    )
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True)
     transaction_approved = models.BooleanField(default=False)
     transaction_id = models.CharField(blank=True, null=True, max_length=255)
     upi_address = models.CharField(blank=True, null=True, max_length=255)
