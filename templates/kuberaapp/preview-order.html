@@ -57,7 +57,8 @@
     
     <!-- Hidden UPI Address Field -->
             <input type="hidden" name="upi_address" value="{{ website_info.upi_id }}">
-            <button type="submit" class="btn btn-success">Deposit</button>
+            <a class="btn btn-success" href="upi://pay?pa={{ website_info.upi_id }}&am={{order.order_total}}">Pay Now</a>
+            <button type="submit" class="btn btn-success">Submit for Approval</button>
         </form>
     </div>
 </div>
