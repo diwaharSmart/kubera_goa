@@ -52,7 +52,8 @@ urlpatterns = [
      path('order_approval/', views.order_approval_list, name='order_approval_list'),
     path('approve/<int:approval_id>/', views.approve_transaction, name='approve_transaction'),
     path('reject/<int:approval_id>/', views.reject_transaction, name='reject_transaction'),
-     path('ticket_prices/', views.ticket_price_list, name='ticket_price_list'),
+    path('ticket_prices/', views.ticket_price_list, name='ticket_price_list'),
+    path('logout/', views.logout_view, name='logout'),
 
 ]
 

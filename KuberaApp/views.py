@@ -420,21 +420,39 @@ def register(request):
             user = form.save()
             login(request, user)  # Log the user in after registration
             return redirect('home')  # Redirect to home page after successful registration
+        else:
+            # Check if the error is due to an existing mobile number
+            
+            return redirect('login')  # Redirect to home page after login
+            
+
     else:
         form = UserRegistrationForm()
     return render(request, 'kuberaapp/register.html', {'form': form})
 
-from django.contrib.auth.forms import AuthenticationForm
+
+
+from django import forms
+
+class MobileNumberLoginForm(forms.Form):
+    mobile_number = forms.CharField(max_length=15)
+
 def user_login(request):
     if request.method == 'POST':
-        
-        form = AuthenticationForm(request, data=request.POST)
+        form = MobileNumberLoginForm(request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')  # Redirect to home page after successful login
+            mobile_number = form.cleaned_data['mobile_number']
+            
+            try:
+                user = User.objects.get(username=mobile_number)
+                
+                # Log in the user
+                login(request, user)
+                return redirect('home')  # Redirect to home page after successful login
+            except User.DoesNotExist:
+                return redirect('register')  # User does not exist, handle this case as needed
     else:
-        form = AuthenticationForm()
+        form = MobileNumberLoginForm()
     return render(request, 'kuberaapp/login.html', {'form': form})
 
 
@@ -693,7 +711,7 @@ def settle_order(request, order_id):
     return redirect('customer_settlements')
 
 
-
+@login_required(login_url='login')
 def book_tickets(request,draw_id):
     ticketprices = TicketPrice.objects.all()
     return render(request, 'kuberaapp/book-tickets.html',{"ticketprices":ticketprices,"draw_id":draw_id})
@@ -782,7 +800,7 @@ def reject_transaction(request, approval_id):
     approval.transaction_status = "rejected"
     approval.transaction_approved = False
     order= Order.objects.get(id= approval.order.id)
-    order.order_status="processing"
+    order.order_status="cancelled"
     order.save()
     approval.save()
     return redirect('order_approval_list')
@@ -791,3 +809,12 @@ def ticket_price_list(request):
     ticket_prices = TicketPrice.objects.all()
     context = {'ticket_prices': ticket_prices}
     return render(request, 'kuberaapp/ticket_price.html', context)
+
+
+from django.contrib.auth import logout
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('home'))
