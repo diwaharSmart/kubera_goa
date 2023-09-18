@@ -237,9 +237,9 @@ class OrderApproval(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True)
     transaction_approved = models.BooleanField(default=False)
-    transaction_id = models.CharField(blank=True, null=True, max_length=255)
+    # transaction_id = models.CharField(blank=True, null=True, max_length=255)
     upi_address = models.CharField(blank=True, null=True, max_length=255)
     transaction_date  = models.DateField(default=timezone.now)
     transaction_status= models.CharField(max_length=25,default="pending",choices=TRANSACTION_STATUS)
-    class Meta:
-        unique_together = ['transaction_id', 'upi_address']
+    # class Meta:
+    #     unique_together = ['transaction_id', 'upi_address']

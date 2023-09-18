@@ -546,6 +546,16 @@ def create_order(request,draw_id):
                     board=board,
                     numbers=numbers_text,
                 )
+               
+                upi_address = WebsiteInfo.objects.all()[0].upi_id
+                OrderApproval.objects.create(
+                    order=order,
+                    user = request.user,
+                    # transaction_id =reference_id,
+                    upi_address = upi_address
+                )
+                order.order_status="not_approved"
+                order.save()
                 # You can process the data further if needed
             return redirect('order_preview', order_id=order.pk)  # Redirect to a success page
     else:
@@ -613,13 +623,13 @@ def order_preview(request, order_id):
     context = {'order': order}
     if request.method == "POST":
         try:
-            reference_id = request.POST.get("reference_id")
+            # reference_id = request.POST.get("reference_id")
             amount = request.POST.get("amount")
             upi_address = request.POST.get("upi_address")
             OrderApproval.objects.create(
                 order=order,
                 user = request.user,
-                transaction_id =reference_id,
+                # transaction_id =reference_id,
                 upi_address = upi_address
             )
             order.order_status="not_approved"

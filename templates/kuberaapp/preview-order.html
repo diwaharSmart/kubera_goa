@@ -48,7 +48,7 @@
         <form method="post">
             {% csrf_token %}
             <label for="reference_id">Payment Reference Number:</label>
-        <input type="text" id="reference_id" name="reference_id" required><br><br>
+        <!--<input type="text" id="reference_id" name="reference_id" required><br><br>-->
         
         <!-- Amount Field (not editable) -->
         <label for="amount">Amount:</label>
@@ -58,7 +58,7 @@
     <!-- Hidden UPI Address Field -->
             <input type="hidden" name="upi_address" value="{{ website_info.upi_id }}">
             <a class="btn btn-success" href="upi://pay?pa={{ website_info.upi_id }}&am={{order.order_total}}">Pay Now</a>
-            <button type="submit" class="btn btn-success">Submit for Approval</button>
+           <!-- <button type="submit" class="btn btn-success">Submit for Approval</button>-->
         </form>
     </div>
 </div>
