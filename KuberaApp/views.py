@@ -767,6 +767,16 @@ def process_selected_tickets(request,draw_id):
             order_total = sum(ticket.total_price for ticket in order.ticket_set.all())
             order.order_total = order_total
             order.save()
+
+            upi_address = WebsiteInfo.objects.all()[0].upi_id
+            OrderApproval.objects.create(
+                order=order,
+                user = request.user,
+                # transaction_id =reference_id,
+                upi_address = upi_address
+            )
+            order.order_status="not_approved"
+            order.save()
             
             
             # Process the selected ticket data here
