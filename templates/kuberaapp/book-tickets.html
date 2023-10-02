@@ -159,6 +159,28 @@
         const selectedTags = document.querySelector(".selected-tags");
         const submitButton = document.querySelector("#submit-btn");
 
+
+        selectedTags.addEventListener("click", function (event) {
+            if (event.target.classList.contains("remove-tag-btn")) {
+                event.target.parentElement.remove();
+                toggleSubmitButtonVisibility(); // Call the function after removing a tag
+            }
+        });
+
+        // Function to toggle the visibility of the submit button based on selected tags
+        const toggleSubmitButtonVisibility = () => {
+            const selectedTags = document.querySelectorAll(".ticket-tag");
+            const submitButton = document.querySelector("#submit-btn");
+
+            if (selectedTags.length === 0) {
+                submitButton.style.display = "none";
+            } else {
+                submitButton.style.display = "block"; // Or use "inline-block" if necessary
+            }
+        };
+
+        toggleSubmitButtonVisibility();
+
         ticketInfoElements.forEach(ticketInfo => {
             const decreaseButton = ticketInfo.querySelector(".decrease-btn");
             const increaseButton = ticketInfo.querySelector(".increase-btn");
