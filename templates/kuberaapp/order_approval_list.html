@@ -8,6 +8,7 @@
     <thead>
         <tr>
             <th>User</th>
+            <th>UID</th>
             <th>User name</th>
             <th>Order</th>
             <th>Order Amount</th>
@@ -22,6 +23,7 @@
         {% for approval in order_approvals %}
             <tr>
                 <td>{{ approval.user }}</td>
+                <td>{{ approval.order.order_uuid }}</td>
                 <td>{{ approval.user.first_name }}</td>
                 <td>{{ approval.order.id }}</td>
                 <td>{{ approval.order.order_total }}</td>

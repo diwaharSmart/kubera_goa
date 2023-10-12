@@ -98,14 +98,18 @@ class OrderCreationInline(admin.TabularInline):
     form = OrderCreationForm
     extra = 0 
 
+class TicketsInline(admin.TabularInline):
+    model = Ticket
+    extra = 0 
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ["order_uuid", "agent","customer", "order_total", "order_date", "cancel_order"]
     list_filter = ["order_date"]
-    search_fields= ["customer"]
+    search_fields= ["order_uuid","customer__username"]
     # exclude = ["agent"]
     readonly_fields = ["order_total","order_status","order_date"]
-    inlines = [OrderCreationInline]
+    inlines = [OrderCreationInline,TicketsInline]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'draw':

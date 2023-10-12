@@ -9,6 +9,9 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Order {{ order.pk }}</h5>
+
+                    <h4 class="card-text">UID {{ order.order_uuid }}</h4>
+                    
                     
                     <p class="card-text">Order Status: <b>{{ order.order_status }}</b></p>
                     {% if order.order_status == 'pending' %}
