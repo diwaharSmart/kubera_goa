@@ -9,7 +9,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Ticket {{ ticket.pk }}</h5>
-                    <p class="card-text">Order ID: {{ ticket.order.order_id }}</p>
+                    <p class="card-text">Order ID: {{ ticket.order.order_uuid }}</p>
                     <p class="card-text">Draw No: {{ ticket.draw.pk }}</p>
                     <p class="card-text">Draw Date: {{ ticket.draw.draw_date|date:"d-M-Y" }}</p>
                     <p class="card-text">Draw Time: {{ ticket.draw.draw_time|time:"h A" }}</p>
